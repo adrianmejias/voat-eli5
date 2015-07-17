@@ -1,7 +1,7 @@
 var pages = [],
     links = [],
     loading = false,
-    shorten = 25,
+    shorten = 30,
     no_more = false,
     stickied = false,
     duplicates = [];
@@ -12,10 +12,10 @@ $('.tabmenu').append($('<li>').addClass('disabled').append($('<a>').addClass('to
     $('.side').toggle();
     if ($('.side').is(':hidden')) {
         $(this).text('Show Side');
-        $('.sitetable .submission').css('width', '33.3333333333%');
+        $('.sitetable .submission[data-fullname]').css('width', '33.3333333333%');
     } else {
         $(this).text('Hide Side');
-        $('.sitetable .submission').css('width', '50%');
+        $('.sitetable .submission[data-fullname]').css('width', '50%');
     }
 }))).append($('<li>').addClass('disabled').append($('<a>').addClass('toggle-votes').attr('href', '#').text('Show Votes').click(function() {
     $('.midcol.unvoted,.scorebar').toggle();
@@ -35,7 +35,7 @@ $('.tabmenu').append($('<li>').addClass('disabled').append($('<a>').addClass('to
 $('.content').css('width', '100%');
 if ($('.pagination-container').length) {
     $('.pagination-container').hide();
-    $('.sitetable').addClass('grid').after($('<div>').addClass('pagination-container').append(
+    $('.sitetable').addClass('row').after($('<div>').addClass('pagination-container').append(
         $('<ul>')
         .append($('<li>').addClass('btn-whoaverse-paging more').css('width', '100%').append($('<a>').attr('href', '#').css('width', '100%').text('Scroll to load more...')).hide())
         .append($('<li>').addClass('btn-whoaverse-paging load-more').css('width', '100%').append($('<a>').attr('href', '#').css('width', '100%').text('Loading more...')).hide())
@@ -73,13 +73,15 @@ if ($('.pagination-container').length) {
                 'min-height': '130px',
                 float: 'left',
                 padding: '0',
-                paddingBottom: '15px'
-            }).addClass('grid-item');
+                paddingBottom: '15px',
+                overflow: 'hidden',
+                maxHeight: '500px'
+            }).addClass('col-md-3');
             var commentLink = $(this).find('.flat-list.buttons .first a'),
                 link = $(this).find('p.title a.title'),
                 text = link.text();
             // trim title
-            if (text.length > shorten) {
+            if (text.length > shorten - 3) {
                 trimmedString = text.substring(0, shorten);
                 trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
                 link.text(trimmedString + ' ..');
@@ -105,16 +107,21 @@ if ($('.pagination-container').length) {
             // big thumbnail
             var thumbnail = $(this).find('.thumbnail').css('border', 'none'),
                 title = $(this).find('p.title a.title');
+            title.parent().css({
+                paddingTop: '5px'
+            });
+            var youtube = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
             if (title.length > 0 && title.attr('href').match(/veuwer\.com\/i\/([a-zA-Z0-9]+)$/g)) {
                 titleSrc = title.attr('href').replace('http:', 'https:') + '.jpg';
                 $(this).find('.clearleft').after(
                     $('<div>').css({
                         width: '100%',
-                        height: '175px',
+                        minHeight: '200px',
+                        maxHeight: '400px',
                         marginBottom: '5px',
                         marginTop: '5px',
                         overflow: 'hidden',
-                        overflowY: 'auto'
+                        'overflow-x': 'auto'
                     }).append(
                         $('<img>').attr('src', titleSrc).addClass('img-responsive')
                     )
@@ -127,11 +134,12 @@ if ($('.pagination-container').length) {
                 $(this).find('.clearleft').after(
                     $('<div>').css({
                         width: '100%',
-                        height: '175px',
+                        minHeight: '200px',
+                        maxHeight: '400px',
                         marginBottom: '5px',
                         marginTop: '5px',
                         overflow: 'hidden',
-                        overflowY: 'auto'
+                        'overflow-x': 'auto'
                     }).append(
                         $('<img>').attr('src', titleSrc).addClass('img-responsive')
                     )
@@ -144,11 +152,12 @@ if ($('.pagination-container').length) {
                 $(this).find('.clearleft').after(
                     $('<div>').css({
                         width: '100%',
-                        height: '175px',
+                        minHeight: '200px',
+                        maxHeight: '400px',
                         marginBottom: '5px',
                         marginTop: '5px',
                         overflow: 'hidden',
-                        overflowY: 'auto'
+                        'overflow-x': 'auto'
                     }).addClass('embed-responsive embed-responsive-4by3').append(
                         $('<iframe>').addClass('embed-responsive-item').attr({
                             src: titleSrc
@@ -156,10 +165,31 @@ if ($('.pagination-container').length) {
                     )
                 );
                 thumbnail.remove();
-            } else {
+            } else if (title.length > 0 && title.attr('href').match(youtube)) {
+                titleSrc = title.attr('href').replace('http:', 'https:');
+                yid = title.attr('href').match(youtube)[1];
+                $(this).find('.clearleft').after(
+                    $('<div>').css({
+                        width: '100%',
+                        minHeight: '200px',
+                        maxHeight: '400px',
+                        marginBottom: '5px',
+                        marginTop: '5px',
+                        overflow: 'hidden',
+                        'overflow-x': 'auto'
+                    }).addClass('embed-responsive embed-responsive-4by3').append(
+                        $('<iframe>').addClass('embed-responsive-item').attr({
+                            src: 'https://www.youtube.com/embed/' + yid
+                        })
+                    )
+                );
+                thumbnail.remove();
+            } else if (title.length > 0) {
                 title.text(title.attr('title')).css({
-                    fontSize: '200%'
+                    fontSize: '200%',
+                    'font-weight': 'normal'
                 });
+                thumbnail.remove();
             }
         } else {
             $(this).hide();
@@ -169,7 +199,8 @@ if ($('.pagination-container').length) {
     };
     $('.sitetable .submission').each(formatSubmission);
     $('.sitetable').css({
-        clear: 'left'
+        clear: 'left',
+        overflow: 'hidden'
     });
     $('[data-fullname]').eqh();
     $(window).scroll(function(e) {
