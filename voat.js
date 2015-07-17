@@ -4,7 +4,8 @@ var pages = [],
     shorten = 30,
     no_more = false,
     stickied = false,
-    duplicates = [];
+    duplicates = [],
+    columns = 2;
 $('body').css('font-family', "'Open Sans', sans-serif");
 $('#header-account').hide();
 $('.side').hide();
@@ -12,13 +13,16 @@ $('.tabmenu').append($('<li>').addClass('disabled').append($('<a>').addClass('to
     $('.side').toggle();
     if ($('.side').is(':hidden')) {
         $(this).text('Show Side');
-        $('.sitetable .submission[data-fullname]').css('width', '33.3333333333%');
+        $('.sitetable .submission[data-fullname]').removeClass('col-1').addClass('col-' + columns);
+        if (columns > 1) {
+            $('.sitetable .submission[data-fullname]').eqh();
+        }
     } else {
         $(this).text('Hide Side');
-        $('.sitetable .submission[data-fullname]').css('width', '50%');
+        $('.sitetable .submission[data-fullname]').removeClass('col-' + columns).addClass('col-1');
     }
 }))).append($('<li>').addClass('disabled').append($('<a>').addClass('toggle-votes').attr('href', '#').text('Show Votes').click(function() {
-    $('.midcol.unvoted,.scorebar').toggle();
+    $('.midcol.unvoted, .scorebar').toggle();
     if ($('.midcol.unvoted').is(':hidden')) {
         $(this).text('Show Votes');
     } else {
@@ -32,26 +36,17 @@ $('.tabmenu').append($('<li>').addClass('disabled').append($('<a>').addClass('to
         $(this).text('Hide Account');
     }
 })));
-$('.content').css('width', '100%');
+//$('.content').css('width', '100%');
 if ($('.pagination-container').length) {
     $('.pagination-container').hide();
-    $('.sitetable').addClass('row').after($('<div>').addClass('pagination-container').append(
+    $('.sitetable').after($('<div>').addClass('pagination-container').append(
         $('<ul>')
-        .append($('<li>').addClass('btn-whoaverse-paging more').css('width', '100%').append($('<a>').attr('href', '#').css('width', '100%').text('Scroll to load more...')).hide())
-        .append($('<li>').addClass('btn-whoaverse-paging load-more').css('width', '100%').append($('<a>').attr('href', '#').css('width', '100%').text('Loading more...')).hide())
-        .append($('<li>').addClass('btn-whoaverse-paging no-more').css('width', '100%').append($('<a>').attr('href', '#').css('width', '100%').text('No more pages to load.')).hide())
+        .append($('<li>').addClass('btn-whoaverse-paging more').append($('<a>').attr('href', '#').text('Scroll to load more...')).hide())
+        .append($('<li>').addClass('btn-whoaverse-paging load-more').append($('<a>').attr('href', '#').text('Loading more...')).hide())
+        .append($('<li>').addClass('btn-whoaverse-paging no-more').append($('<a>').attr('href', '#').text('No more pages to load.')).hide())
     ));
     $('a[href="/random"]').remove();
-    $('body').prepend($('<div>').attr('id', 'link-overlay').css({
-        background: 'none repeat scroll 0 0 #151515',
-        height: '100%',
-        width: '100%',
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        opacity: '.9',
-        zIndex: '10001'
-    }).hide().click(function(e) {
+    $('body').prepend($('<div>').attr('id', 'link-overlay').addClass('link-overlay').hide().click(function(e) {
         e.preventDefault();
         $(this).hide();
         $('#expando-item').remove();
@@ -68,30 +63,19 @@ if ($('.pagination-container').length) {
         }
         if ($.inArray(id, links) == -1) {
             links.push(id);
-            $(this).css({
-                width: '33.3333333333%',
-                'min-height': '130px',
-                float: 'left',
-                padding: '0',
-                paddingBottom: '15px',
-                overflow: 'hidden',
-                maxHeight: '500px'
-            }).addClass('col-md-3');
+            $(this).addClass('col col-' + columns);
             var commentLink = $(this).find('.flat-list.buttons .first a'),
                 link = $(this).find('p.title a.title'),
                 text = link.text();
             // trim title
-            if (text.length > shorten - 3) {
+            if (text.length > shorten + 3) {
                 trimmedString = text.substring(0, shorten);
                 trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
                 link.text(trimmedString + ' ..');
             }
-            $(this).find('.scorebar').css({
-                'min-height': '100px',
-                'width': '10px'
-            });
+            $(this).find('.scorebar').addClass('no-scorebar');
             // hide voting
-            $(this).find('.midcol.unvoted,.scorebar').hide();
+            $(this).find('.midcol.unvoted, .scorebar').hide();
             // show comment + link
             if (commentLink.attr('href') != link.attr('href')) {
                 $(this).find('.flat-list.buttons .first').after($('<li>').append($('<a>').attr({
@@ -107,23 +91,12 @@ if ($('.pagination-container').length) {
             // big thumbnail
             var thumbnail = $(this).find('.thumbnail').css('border', 'none'),
                 title = $(this).find('p.title a.title');
-            title.parent().css({
-                paddingTop: '5px'
-            });
             var youtube = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
             if (title.length > 0 && title.attr('href').match(/veuwer\.com\/i\/([a-zA-Z0-9]+)$/g)) {
                 titleSrc = title.attr('href').replace('http:', 'https:') + '.jpg';
                 $(this).find('.clearleft').after(
-                    $('<div>').css({
-                        width: '100%',
-                        minHeight: '200px',
-                        maxHeight: '400px',
-                        marginBottom: '5px',
-                        marginTop: '5px',
-                        overflow: 'hidden',
-                        'overflow-x': 'auto'
-                    }).append(
-                        $('<img>').attr('src', titleSrc).addClass('img-responsive')
+                    $('<div>').addClass('embed-item').append(
+                        $('<img>').attr('src', titleSrc).addClass('img-responsive').attr('data-featherlight', titleSrc)
                     )
                 );
                 if (thumbnail.length > 0) {
@@ -132,16 +105,8 @@ if ($('.pagination-container').length) {
             } else if (title.length > 0 && title.attr('href').match(/(.+)\.(jpe|jpe?g|gif|png)$/g) && !title.attr('href').match(/slimimgur\.com/g)) {
                 titleSrc = title.attr('href').match(/imgur\.com/g) && !title.attr('href').match(/slimimgur\.com/g) ? title.attr('href').replace('http:', 'https:') : title.attr('href');
                 $(this).find('.clearleft').after(
-                    $('<div>').css({
-                        width: '100%',
-                        minHeight: '200px',
-                        maxHeight: '400px',
-                        marginBottom: '5px',
-                        marginTop: '5px',
-                        overflow: 'hidden',
-                        'overflow-x': 'auto'
-                    }).append(
-                        $('<img>').attr('src', titleSrc).addClass('img-responsive')
+                    $('<div>').addClass('embed-item').append(
+                        $('<img>').attr('src', titleSrc).addClass('img-responsive').attr('data-featherlight', titleSrc)
                     )
                 );
                 if (thumbnail.length > 0) {
@@ -150,15 +115,7 @@ if ($('.pagination-container').length) {
             } else if (title.length > 0 && title.attr('href').match(/(.+)\.(gifv|webm)$/g) && !title.attr('href').match(/slimimgur\.com/g)) {
                 titleSrc = title.attr('href').match(/imgur\.com/g) ? title.attr('href').replace('http:', 'https:') : title.attr('href');
                 $(this).find('.clearleft').after(
-                    $('<div>').css({
-                        width: '100%',
-                        minHeight: '200px',
-                        maxHeight: '400px',
-                        marginBottom: '5px',
-                        marginTop: '5px',
-                        overflow: 'hidden',
-                        'overflow-x': 'auto'
-                    }).addClass('embed-responsive embed-responsive-4by3').append(
+                    $('<div>').addClass('embed-responsive embed-responsive-4by3 embed-item').append(
                         $('<iframe>').addClass('embed-responsive-item').attr({
                             src: titleSrc
                         })
@@ -169,15 +126,7 @@ if ($('.pagination-container').length) {
                 titleSrc = title.attr('href').replace('http:', 'https:');
                 yid = title.attr('href').match(youtube)[1];
                 $(this).find('.clearleft').after(
-                    $('<div>').css({
-                        width: '100%',
-                        minHeight: '200px',
-                        maxHeight: '400px',
-                        marginBottom: '5px',
-                        marginTop: '5px',
-                        overflow: 'hidden',
-                        'overflow-x': 'auto'
-                    }).addClass('embed-responsive embed-responsive-4by3').append(
+                    $('<div>').addClass('embed-responsive embed-responsive-4by3 embed-item').append(
                         $('<iframe>').addClass('embed-responsive-item').attr({
                             src: 'https://www.youtube.com/embed/' + yid
                         })
@@ -185,14 +134,7 @@ if ($('.pagination-container').length) {
                 );
                 thumbnail.remove();
             } else if (title.length > 0) {
-                title.text(title.attr('title')).css({
-                    fontFamily: "'Open Sans', arial, helvetica, sans-serif",
-                    lineHeight: '32px',
-                    fontSize: '2em',
-                    fontWeight: 'normal',
-                    padding: '6px 0px 6px 0px',
-                    textTransform: 'uppercase'
-                });
+                title.text(title.attr('title')).addClass('article-title');
                 thumbnail.remove();
             }
         } else {
@@ -202,10 +144,7 @@ if ($('.pagination-container').length) {
         }
     };
     $('.sitetable .submission').each(formatSubmission);
-    $('.sitetable').css({
-        clear: 'left',
-        overflow: 'hidden'
-    });
+    $('.sitetable').addClass('verse');
     $('[data-fullname]').eqh();
     $(window).scroll(function(e) {
         if (no_more) {
@@ -259,7 +198,9 @@ if ($('.pagination-container').length) {
                         }
                     }, 'html').done(function() {
                         // second success
-                        $('[data-fullname]').eqh();
+                        if (columns > 1) { 
+                            $('.sitetable .submission[data-fullname]').eqh();
+                        }
                     }).fail(function() {
                         // error
                     }).always(function() {
