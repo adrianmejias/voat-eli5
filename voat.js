@@ -186,8 +186,12 @@ if ($('.pagination-container').length) {
                 thumbnail.remove();
             } else if (title.length > 0) {
                 title.text(title.attr('title')).css({
-                    fontSize: '200%',
-                    'font-weight': 'normal'
+                    fontFamily: "'Open Sans', arial, helvetica, sans-serif",
+                    lineHeight: '32px',
+                    fontSize: '2em',
+                    fontWeight: 'normal',
+                    padding: '6px 0px 6px 0px',
+                    textTransform: 'uppercase'
                 });
                 thumbnail.remove();
             }
