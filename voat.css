@@ -52,7 +52,7 @@
 	font-family: 'Open Sans', arial, helvetica, sans-serif;
 	line-height: 32px;
 	font-size: 2em;
-	font-weight: normal;
+	font-weight: normal !important;
 	padding: 6px 0px 6px 0px;
 	text-transform: uppercase;
 }
