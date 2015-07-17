@@ -1,0 +1,35 @@
+{
+    "manifest_version": 2,
+
+    "name": "VOAT ELI5",
+    "description": "Simple VOAT page modifications for people who know what they want out of life.",
+    "author": "@adrianmejias <adrianmejias@gmail.com",
+    "version": "0.0.1",
+
+    "content_scripts": [{
+        "js": ["jquery-2.1.4.min.js", "eqh.min.js", "voat.js"],
+        "css": ["voat.css"],
+        "matches": [
+            "*://*.voat.co/*",
+            "*://voat.co/*",
+            "*://*.voat.co/",
+            "*://voat.co/"
+        ]
+    }],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "icons": ["icon.png"],
+        "popup": "popup.html",
+        "name": "VOAT ELI5"
+    },
+
+    "permissions": [
+        "activeTab",
+        "*://fonts.googleapis.com/*",
+        "*://fonts.googleapis.com/",
+        "*://*.voat.co/*",
+        "*://voat.co/*",
+        "*://*.voat.co/",
+        "*://voat.co/"
+    ]
+}
