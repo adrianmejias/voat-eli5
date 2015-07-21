@@ -51,7 +51,7 @@
 .col a.title.article-title {
 	font-family: 'Open Sans', arial, helvetica, sans-serif;
 	line-height: 32px;
-	font-size: 2em;
+	font-size: 1.5em;
 	font-weight: normal !important;
 	padding: 6px 0px 6px 0px;
 	text-transform: uppercase;
@@ -77,4 +77,8 @@
 	margin-top: 5px;
 	overflow: hidden;
 	overflow-x: auto;
+}
+.featherlight-image.featherlight-inner {
+	width: 100% !important;
+	height: auto !important;
 }
