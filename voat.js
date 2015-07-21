@@ -68,11 +68,11 @@ if ($('.pagination-container').length) {
                 link = $(this).find('p.title a.title'),
                 text = link.text();
             // trim title
-            if (text.length > shorten + 3) {
+            /*if (text.length > shorten + 3) {
                 trimmedString = text.substring(0, shorten);
                 trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
                 link.text(trimmedString + ' ..');
-            }
+            }*/
             $(this).find('.scorebar').addClass('no-scorebar');
             // hide voting
             $(this).find('.midcol.unvoted, .scorebar').hide();
