@@ -6,6 +6,8 @@
 .sitetable.verse {
 	clear: left;
 	overflow: hidden;
+	margin-right: -15px;
+	margin-left: -15px;
 }
 .link-overlay {
 	background: none repeat scroll 0 0 #151515;
@@ -40,6 +42,29 @@
 	padding-bottom: 15px;
 	overflow: hidden;
 	max-height: 500px;
+}
+.column-btn-list {
+	position: relative;
+}
+.column-btn-list a:first {
+	display: inline-block;
+}
+.toggle-columns {
+	position: absolute;
+	right: 0;
+	display: none;
+	z-index: 1;
+}
+.toggle-columns li {
+	display: block !important;
+	margin: 0 !important;
+}
+.toggle-columns li a {
+	margin: 15px !important;
+}
+.scorebar {
+	width: 15px !important;
+	border-radius: 100px !important;
 }
 .no-scorebar {
 	min-height: 100px;
