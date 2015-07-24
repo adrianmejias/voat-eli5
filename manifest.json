@@ -7,7 +7,7 @@
     "version": "0.0.1",
 
     "content_scripts": [{
-        "js": ["jquery-2.1.4.min.js", "featherlight.min.js", "eqh.min.js", "voat.min.js"],
+        "js": ["jquery-2.1.4.min.js", "jquery.appear.min.js", "featherlight.min.js", "eqh.min.js", "voat.js"],
         "css": ["featherlight.min.css", "voat.min.css"],
         "matches": [
             "*://*.voat.co/*",
