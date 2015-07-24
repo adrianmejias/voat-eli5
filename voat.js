@@ -188,10 +188,10 @@ if ($('.pagination-container').length) {
         if (loading) {
             return;
         }
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+        if (($(window).scrollTop() + $(window).height()) > ($(document).height() - 200) || ($('.more').is(':hidden') && $('.more').is(':appeared'))) {
             $('.more').show();
         }
-        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+        if (($(window).scrollTop() + $(window).height()) == $(document).height() || ($('.more').is(':visible') && $('.more').is(':appeared'))) {
             $('.more').hide();
             $('.no-more').hide();
             var next = $('.pagination-container [rel=next]').attr('href'),
