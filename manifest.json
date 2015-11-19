@@ -5,7 +5,6 @@
     "description": "Simple VOAT page modifications for people who know what they want out of life.",
     "author": "@adrianmejias <adrianmejias@gmail.com",
     "version": "0.0.1",
-    "update_url": "https://adrianmejias.com/voat-eli5/updates.xml",
 
     "content_scripts": [{
         "js": ["jquery-2.1.4.min.js", "jquery.appear.min.js", "featherlight.min.js", "eqh.min.js", "voat.min.js"],
